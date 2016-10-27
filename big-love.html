@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer.html">
-
 <!--
 `big-love`
 A like icon that loves you back
@@ -10,12 +9,13 @@ A like icon that loves you back
 <dom-module id="big-love">
   <template>
     <style>
-      like-icon{
-          width: 40px;
-          height: 46px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+      like-icon {
+        width: 40px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
       }
       .like-inner{
           z-index: 1;
@@ -27,25 +27,25 @@ A like icon that loves you back
           background-size: contain;
           background-repeat: no-repeat;
       }
-      .like-inner.liked{
+      like-icon.liked .like-inner{
           background-image: url('assets/like.svg');
       }
-      .like-inner:hover{
+      :host[like] .like-inner{
+          background-image: url('assets/like.svg');
+      }
+      like-icon:hover > .like-inner{
           width:27px;
           height: 27px;
       }
-      .like-inner:active{
+      like-icon:active > .like-inner{
           width: 40px;
           height: 40px;
           background-image: url('assets/like.svg');
       }
-      :host {
-        display: inline-block;
-      }
     </style>
 
     <like-icon>
-      <div class='like-inner'></div>
+        <div class="like-inner"></div>
     </like-icon>
   </template>
 
@@ -67,8 +67,10 @@ A like icon that loves you back
       }
       likeAnimation();
 
-      function generateParticles(x, y){
-          var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      function generateParticles(_x, _y){
+          var x = _x,
+              y = _y,
+              svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
           svg.setAttribute("height", 400);
           svg.setAttribute("width", 200);
           svg.setAttribute("style", "position: absolute; top: "+ (y - 200) +"; left: "+ (x - 100) +";");
@@ -131,10 +133,10 @@ A like icon that loves you back
     },
     likeTap: function(e) {
         this.like = !this.like;
-        this.toggleClass('liked', this.like, this.$$('.like-inner'));
+        this.toggleClass('liked', this.like, this.$$('like-icon'));
         if(this.like){
-            var x = e.target.getBoundingClientRect().left + 12,
-            y = e.target.getBoundingClientRect().top + 16;
+            var x = e.target.getBoundingClientRect().left + 12 + window.scrollX,
+                y = e.target.getBoundingClientRect().top + 16 + window.scrollY;
             this.playLikeAnimation(x, y);
         }
     },
@@ -143,10 +145,10 @@ A like icon that loves you back
         type: Boolean,
         value: false,
         notify: true,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        reflectToClass: true
       }
     }
   });
   </script>
-
 </dom-module>

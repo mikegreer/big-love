@@ -12,15 +12,68 @@
     <link rel="import" href="../big-love.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
+    .lorra-love{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .no-select{
+        user-select: none;
+    }
     </style>
   </head>
   <body>
 
     <div class="vertical-section-container centered">
-      <h3>Basic big-love Demo</h3>
+        <h3>Big-love</h3>
+        <demo-snippet>
+          <template>
+              <div class="lorra-love">
+                  <big-love></big-love><span class="no-select">like</span>
+              </div>
+          </template>
+        </demo-snippet>
+    </div>
+
+    <div class="vertical-section-container centered">
+      <h3>Lorra lorra love</h3>
       <demo-snippet>
         <template>
-          <big-love></big-love>
+            <div class="lorra-love">
+              <big-love like></big-love>
+              <big-love like></big-love>
+              <big-love like></big-love>
+              <big-love></big-love>
+              <big-love></big-love>
+            </div>
+            <div class="lorra-love">
+              <big-love like></big-love>
+              <big-love></big-love>
+              <big-love like></big-love>
+              <big-love></big-love>
+              <big-love></big-love>
+            </div>
+            <div class="lorra-love">
+              <big-love like></big-love>
+              <big-love like></big-love>
+              <big-love like></big-love>
+              <big-love like></big-love>
+              <big-love like></big-love>
+            </div>
+            <div class="lorra-love">
+              <big-love></big-love>
+              <big-love></big-love>
+              <big-love like></big-love>
+              <big-love></big-love>
+              <big-love like></big-love>
+            </div>
+            <div class="lorra-love">
+              <big-love ></big-love>
+              <big-love></big-love>
+              <big-love like></big-love>
+              <big-love like></big-love>
+              <big-love like></big-love>
+            </div>
         </template>
       </demo-snippet>
     </div>
