@@ -1,0 +1,154 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`big-love`
+A like icon that loves you back
+
+@demo demo/index.html
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="big-love">
+  <template>
+    <style>
+      like-icon{
+          width: 40px;
+          height: 46px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+      .like-inner{
+          z-index: 1;
+          width: 22px;
+          height: 22px;
+          transition: all 0.2s ease-out;
+          cursor: pointer;
+          background-image: url('assets/like-outline.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+      }
+      .like-inner.liked{
+          background-image: url('assets/like.svg');
+      }
+      .like-inner:hover{
+          width:27px;
+          height: 27px;
+      }
+      .like-inner:active{
+          width: 40px;
+          height: 40px;
+          background-image: url('assets/like.svg');
+      }
+      :host {
+        display: inline-block;
+      }
+    </style>
+
+    <like-icon>
+      <div class='like-inner'></div>
+    </like-icon>
+  </template>
+
+  <script>
+  Polymer({
+    playLikeAnimation: function (x, y) {
+      var particles = [];
+      var idCount = 0;
+      var px = x;
+      var py = y;
+      var snd = new Audio("../assets/bubbles-sound.wav");
+      snd.play();
+
+      function likeAnimation (){
+          generateParticles(x, y);
+          setTimeout(function(){
+              generateParticles(x, y)
+          }, 250);
+      }
+      likeAnimation();
+
+      function generateParticles(x, y){
+          var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("height", 400);
+          svg.setAttribute("width", 200);
+          svg.setAttribute("style", "position: absolute; top: "+ (y - 200) +"; left: "+ (x - 100) +";");
+          svg.setAttribute("id", "outer" + idCount);
+
+          for(var i = 0; i < 30; i++){
+              var newParticle = {
+                x: 0,
+                y: 0,
+                r: Math.random() * 10,
+                dx: Math.random() * 6 - 3,
+                dy: Math.random() * - 10,
+                color: '#'+Math.floor(Math.random()*1777215 + 15000000).toString(16),
+                id: idCount,
+                scale: 1
+              }
+              particles.push(newParticle);
+              var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+              circle.setAttribute("cx", newParticle.r);
+              circle.setAttribute("cy",newParticle.r);
+              circle.setAttribute("r", newParticle.r);
+              circle.setAttribute("fill", newParticle.color);
+              circle.setAttribute("id", "inner"+idCount);
+              svg.appendChild(circle);
+              document.body.appendChild(svg);
+              // Polymer.dom(this.root).appendChild(svg);
+              idCount ++;
+          }
+      }
+
+      function frameTick(){
+          if(particles.length > 0){
+              requestAnimationFrame(frameTick);
+          }
+          for(var i = 0; i < particles.length; i++){
+              p = particles[i];
+              var inner = document.getElementById('inner'+p.id);
+              inner.setAttribute("transform", "translate("+ (p.x + 100) +", "+ (p.y + 200) +") scale("+ p.scale +", "+ p.scale +")");
+              p.x += p.dx;
+              p.y += p.dy;
+              p.dy += 0.3;
+              if(p.scale > 0.1){
+                  p.scale -= 0.02;
+              }else{
+                  particles.splice(i, 1);
+                  var outer = inner.parentElement;
+                  inner.remove();
+                  if(!outer.hasChildNodes()){
+                      outer.remove();
+                  }
+              }
+          }
+      }
+      frameTick();
+    },
+
+    is: 'big-love',
+    listeners: {
+        'tap': 'likeTap',
+    },
+    likeTap: function(e) {
+        this.like = !this.like;
+        this.toggleClass('liked', this.like, this.$$('.like-inner'));
+        if(this.like){
+            var x = e.target.getBoundingClientRect().left + 12,
+            y = e.target.getBoundingClientRect().top + 16;
+            this.playLikeAnimation(x, y);
+        }
+    },
+    properties: {
+      like: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true
+      }
+    }
+  });
+  </script>
+
+</dom-module>
