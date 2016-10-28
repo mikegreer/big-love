@@ -57,6 +57,10 @@ A like icon that loves you back
       var px = x;
       var py = y;
       var snd = new Audio("../assets/bubbles-sound.wav");
+      var svgWrap = {
+          width: 600,
+          height: 300
+      }
       snd.play();
 
       function likeAnimation (){
@@ -71,9 +75,9 @@ A like icon that loves you back
           var x = _x,
               y = _y,
               svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-          svg.setAttribute("height", 400);
-          svg.setAttribute("width", 200);
-          svg.setAttribute("style", "position: absolute; top: "+ (y - 200) +"; left: "+ (x - 100) +";");
+          svg.setAttribute("height", svgWrap.width);
+          svg.setAttribute("width", svgWrap.height);
+          svg.setAttribute("style", "position: absolute; top: "+ (y - (svgWrap.width / 2)) +"; left: "+ (x - (svgWrap.height / 2)) +";");
           svg.setAttribute("id", "outer" + idCount);
 
           for(var i = 0; i < 30; i++){
@@ -108,7 +112,7 @@ A like icon that loves you back
           for(var i = 0; i < particles.length; i++){
               p = particles[i];
               var inner = document.getElementById('inner'+p.id);
-              inner.setAttribute("transform", "translate("+ (p.x + 100) +", "+ (p.y + 200) +") scale("+ p.scale +", "+ p.scale +")");
+              inner.setAttribute("transform", "translate("+ (p.x + (svgWrap.height / 2)) +", "+ (p.y + (svgWrap.width / 2)) +") scale("+ p.scale +", "+ p.scale +")");
               p.x += p.dx;
               p.y += p.dy;
               p.dy += 0.3;
